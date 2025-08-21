@@ -69,7 +69,7 @@ If this extension helps you and you want to support the project:
 - **Donate (optional):** PayPal — **franklin.ayres@hotmail.com**
 
 ## Privacy
-Your profile data stays **in your browser** (`chrome.storage`). Nothing is sent to servers.
+Your profile data stays **in your browser** (`browser.storage`/`chrome.storage`). Nothing is sent to servers.
 
 ## License
 Distributed under the **MIT License**. See `LICENSE`.
