@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Autofill Extension Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .profile-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .job-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .mapped-field {
+            background-color: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        
+        .mapped-field h4 {
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        
+        .mapped-field p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .preview-pane {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        
+        .preview-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #ecf0f1;
+        }
+        
+        .preview-field {
+            padding: 10px;
+            background: #34495e;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .field-name {
+            font-weight: 600;
+        }
+        
+        .field-value {
+            color: #3498db;
+        }
+        
+        .instructions {
+            background: #fff8e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .instructions h3 {
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Job Autofill Assistant</h1>
+            <p class="subtitle">Save time by automatically filling job applications with your profile</p>
+        </header>
+        
+        <div class="card">
+            <h2 class="card-title">Your Profile Information</h2>
+            <div class="profile-form">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" class="form-control" value="Franklin">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" class="form-control" value="Ayres">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" value="franklin.ayres@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" class="form-control" value="+55 (11) 91234-5678">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" class="form-control" value="Av. Paulista, 1000">
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" class="form-control" value="São Paulo">
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" id="state" class="form-control" value="SP">
+                </div>
+                <div class="form-group">
+                    <label for="zip">ZIP Code</label>
+                    <input type="text" id="zip" class="form-control" value="01310-100">
+                </div>
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn</label>
+                    <input type="url" id="linkedin" class="form-control" value="linkedin.com/in/franklinayres">
+                </div>
+                <div class="form-group">
+                    <label for="portfolio">Portfolio</label>
+                    <input type="url" id="portfolio" class="form-control" value="franklinayres.dev">
+                </div>
+            </div>
+            <button class="btn" id="saveProfile" style="margin-top: 15px;">Save Profile</button>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title">Job Application Form</h2>
+            <div class="job-form">
+                <div class="form-group">
+                    <label for="jobFirstName">First Name *</label>
+                    <input type="text" id="jobFirstName" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobLastName">Last Name *</label>
+                    <input type="text" id="jobLastName" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobEmail">Email Address *</label>
+                    <input type="email" id="jobEmail" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobPhone">Phone Number *</label>
+                    <input type="tel" id="jobPhone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobAddress">Street Address</label>
+                    <input type="text" id="jobAddress" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobCity">City</label>
+                    <input type="text" id="jobCity" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobState">State/Province</label>
+                    <input type="text" id="jobState" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobZip">ZIP/Postal Code</label>
+                    <input type="text" id="jobZip" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobLinkedIn">LinkedIn Profile</label>
+                    <input type="url" id="jobLinkedIn" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="jobPortfolio">Portfolio Website</label>
+                    <input type="url" id="jobPortfolio" class="form-control">
+                </div>
+            </div>
+            
+            <div class="status status-info">
+                Click "Detect Fields" to map form fields to your profile
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn" id="detectBtn">Detect Fields</button>
+                <button class="btn btn-success" id="autofillBtn">Run Autofill</button>
+                <button class="btn btn-danger" id="resetBtn">Reset Form</button>
+            </div>
+            
+            <div class="preview-pane">
+                <h3 class="preview-title">Autofill Preview</h3>
+                <div class="preview-field">
+                    <span class="field-name">First Name:</span>
+                    <span class="field-value">John</span>
+                </div>
+                <div class="preview-field">
+                    <span class="field-name">Last Name:</span>
+                    <span class="field-value">Doe</span>
+                </div>
+                <div class="preview-field">
+                    <span class="field-name">Email:</span>
+                    <span class="field-value">john.doe@example.com</span>
+                </div>
+                <div class="preview-field">
+                    <span class="field-name">Phone:</span>
+                    <span class="field-value">(555) 123-4567</span>
+                </div>
+                <div class="preview-field">
+                    <span class="field-name">Address:</span>
+                    <span class="field-value">123 Main St, New York, NY 10001</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>How to Use the Extension</h3>
+            <ol>
+                <li>Fill out your profile information on the left</li>
+                <li>Navigate to a job application form</li>
+                <li>Click the extension icon or use Ctrl/Cmd+Shift+Y shortcut</li>
+                <li>The extension will detect and map form fields to your profile</li>
+                <li>Review the autofill preview and confirm to fill the form</li>
+                <li>Submit the form manually after verification</li>
+            </ol>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title">Field Mappings</h2>
+            <div class="mapped-field">
+                <h4>First Name</h4>
+                <p>Mapped from: #jobFirstName → Profile.firstName</p>
+            </div>
+            <div class="mapped-field">
+                <h4>Last Name</h4>
+                <p>Mapped from: #jobLastName → Profile.lastName</p>
+            </div>
+            <div class="mapped-field">
+                <h4>Email</h4>
+                <p>Mapped from: #jobEmail → Profile.email</p>
+            </div>
+            <div class="mapped-field">
+                <h4>Phone</h4>
+                <p>Mapped from: #jobPhone → Profile.phone</p>
+            </div>
+            <button class="btn">Manage Mappings</button>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title">Supported Job Platforms</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
+                <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <h4>Workday</h4>
+                </div>
+                <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <h4>Greenhouse</h4>
+                </div>
+                <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <h4>Lever</h4>
+                </div>
+                <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <h4>Taleo</h4>
+                </div>
+                <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <h4>SuccessFactors</h4>
+                </div>
+                <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <h4>ICIMS</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const detectBtn = document.getElementById('detectBtn');
+            const autofillBtn = document.getElementById('autofillBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const statusDiv = document.querySelector('.status');
+            const saveProfileBtn = document.getElementById('saveProfile');
+            
+            // Sample field mappings
+            const fieldMappings = {
+                'jobFirstName': 'firstName',
+                'jobLastName': 'lastName',
+                'jobEmail': 'email',
+                'jobPhone': 'phone',
+                'jobAddress': 'address',
+                'jobCity': 'city',
+                'jobState': 'state',
+                'jobZip': 'zip',
+                'jobLinkedIn': 'linkedin',
+                'jobPortfolio': 'portfolio'
+            };
+            
+            // Save profile feedback
+            saveProfileBtn.addEventListener('click', function(){
+                statusDiv.textContent = 'Profile saved (demo).';
+                statusDiv.className = 'status status-success';
+                setTimeout(function(){
+                    statusDiv.textContent = 'Click "Detect Fields" to map form fields to your profile';
+                    statusDiv.className = 'status status-info';
+                }, 1200);
+            });
+            
+            // Detect form fields
+            detectBtn.addEventListener('click', function() {
+                statusDiv.textContent = 'Fields detected and mapped successfully!';
+                statusDiv.className = 'status status-success';
+                
+                // Simulate field detection
+                setTimeout(function() {
+                    alert('10 form fields detected and mapped to your profile!');
+                }, 500);
+            });
+            
+            // Autofill form
+            autofillBtn.addEventListener('click', function() {
+                // Build profile from left column
+                const profile = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName:  document.getElementById('lastName').value,
+                    email:     document.getElementById('email').value,
+                    phone:     document.getElementById('phone').value,
+                    address:   document.getElementById('address').value,
+                    city:      document.getElementById('city').value,
+                    state:     document.getElementById('state').value,
+                    zip:       document.getElementById('zip').value,
+                    linkedin:  document.getElementById('linkedin').value,
+                    portfolio: document.getElementById('portfolio').value
+                };
+                
+                // Fill the right-side demo form
+                Object.entries(fieldMappings).forEach(function([formField, profileKey]) {
+                    const el = document.getElementById(formField);
+                    if (el) el.value = profile[profileKey] || '';
+                });
+                
+                statusDiv.textContent = 'Form autofilled successfully! Please review before submitting.';
+                statusDiv.className = 'status status-success';
+            });
+            
+            // Reset form
+            resetBtn.addEventListener('click', function() {
+                Object.keys(fieldMappings).forEach(function(field) {
+                    document.getElementById(field).value = '';
+                });
+                
+                statusDiv.textContent = 'Form has been reset. Click "Detect Fields" to map form fields.';
+                statusDiv.className = 'status status-info';
+            });
+        });
+    </script>
+</body>
+</html>

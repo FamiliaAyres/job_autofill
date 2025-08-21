@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Job Autofill Assistant – Profile</title>
+  <style>
+    body { font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 16px; }
+    h1 { font-size: 18px; margin: 0 0 12px; }
+    .row { display: grid; grid-template-columns: 180px 1fr 100px; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .row input { width: 100%; padding: 6px 8px; }
+    .row .del { color: #a00; cursor: pointer; text-align: center; }
+    #addRow { margin-top: 8px; }
+    #status { margin-left: 8px; color: #0a7; font-weight: 600; }
+    .btns { margin-top: 12px; display: flex; gap: 8px; }
+    small { color: #555; }
+    .hint { color:#555; margin: 10px 0 2px;}
+    .preset { display:inline-block; margin: 2px 6px 6px 0; padding: 4px 8px; border:1px solid #ccc; border-radius: 6px; cursor:pointer; font-size: 12px; }
+    .preset:hover { background:#f5f5f5; }
+    textarea { width:100%; height:120px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <h1>Job Autofill Assistant – Profile</h1>
+
+  <p class="hint">Clique em um “preset” para adicionar rapidamente um campo comum:</p>
+  <div id="presets"></div>
+
+  <div id="rows"></div>
+  <button id="addRow">+ Add Field</button>
+
+  <div class="btns">
+    <button id="save">Save Profile</button>
+    <span id="status"></span>
+  </div>
+
+  <h3>Import / Export</h3>
+  <p><small>Use JSON para migrar seu perfil entre máquinas:</small></p>
+  <div class="btns">
+    <button id="export">Export JSON</button>
+    <button id="importBtn">Import JSON</button>
+  </div>
+  <textarea id="io" placeholder='{"firstName":"John","lastName":"Doe"}'></textarea>
+
+  <script src="options.js"></script>
+</body>
+</html>

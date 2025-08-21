@@ -1,0 +1,75 @@
+{
+  "manifest_version": 2,
+  "name": "Job Autofill Assistant",
+  "version": "1.1.0",
+  "description": "Save your profile once and autofill repetitive job application forms. Highlights Submit; you confirm manually.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "*://*.workday.com/*",
+    "*://*.myworkdayjobs.com/*",
+    "*://*.greenhouse.io/*",
+    "*://*.lever.co/*",
+    "*://*.taleo.net/*",
+    "*://*.successfactors.com/*",
+    "*://*.icims.com/*",
+    "*://*.smartrecruiters.com/*",
+    "*://*.workable.com/*",
+    "https://*/*",
+    "http://*/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "browser_action": {
+    "default_title": "Job Autofill Assistant",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "match_about_blank": true
+    }
+  ],
+  "commands": {
+    "run-autofill": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Run autofill on this page"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "job-autofill@yourdomain.com"
+    }
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  }
+}
