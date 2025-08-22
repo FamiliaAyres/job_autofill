@@ -1,7 +1,11 @@
 # Job Autofill Assistant
 
 **Author:** Franklin Ayres  
-**Repository:** https://github.com/FamiliaAyres/job_autofill  
+**Repository:** https://github.com/FamiliaAyres/job_autofill
+
+**Linkedin:**
+https://www.linkedin.com/in/franklin-ayres-9840481a/
+
 **Contact / PayPal (donations welcome):** franklin.ayres@hotmail.com
 
 > _“I know what it’s like to fill the same job application forms over and over.
